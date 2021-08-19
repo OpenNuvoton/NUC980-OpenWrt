@@ -134,6 +134,7 @@ define BuildKernel
 
   $(STAMP_CONFIGURED): $(STAMP_PREPARED) $(LINUX_KCONFIG_LIST) $(TOPDIR)/.config FORCE
 	$(Kernel/Configure)
+	-mkdir -p $(KERNEL_BUILD_DIR)/image
 	touch $$@
 
   $(LINUX_DIR)/.modules: $(STAMP_CONFIGURED) $(LINUX_DIR)/.config FORCE

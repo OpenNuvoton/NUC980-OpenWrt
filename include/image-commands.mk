@@ -3,12 +3,17 @@
 IMAGE_KERNEL = $(word 1,$^)
 IMAGE_ROOTFS = $(word 2,$^)
 
+#define Build/uImage
+#	mkimage -A $(LINUX_KARCH) \
+#		-O linux -T kernel \
+#		-C $(1) -a $(KERNEL_LOADADDR) -e $(if $(KERNEL_ENTRY),$(KERNEL_ENTRY),$(KERNEL_LOADADDR)) \
+#		-n '$(if $(UIMAGE_NAME),$(UIMAGE_NAME),$(call toupper,$(LINUX_KARCH)) LEDE Linux-$(LINUX_VERSION))' -d $@ $@.new
+#	mv $@.new $@
+#endef
+
+# Overwrite this function avoid pack uImage twice.
 define Build/uImage
-	mkimage -A $(LINUX_KARCH) \
-		-O linux -T kernel \
-		-C $(1) -a $(KERNEL_LOADADDR) -e $(if $(KERNEL_ENTRY),$(KERNEL_ENTRY),$(KERNEL_LOADADDR)) \
-		-n '$(if $(UIMAGE_NAME),$(UIMAGE_NAME),$(call toupper,$(LINUX_KARCH)) LEDE Linux-$(LINUX_VERSION))' -d $@ $@.new
-	mv $@.new $@
+	:
 endef
 
 define Build/netgear-chk
