@@ -87,14 +87,11 @@ define Device/nuc980-chili
   DEVICE_PROFILE = $$(BOARDNAME)
   PROFILES = Default Minimal $$(DEVICE_PROFILE)
   KERNEL := kernel-bin | uImage none
-  KERNEL_SIZE := 10240k
-  FILESYSTEMS := ubifs
-  PAGESIZE := 2048
-  BLOCKSIZE := 128k
-  SUBPAGESIZE := 2048
-  VID_HDR_OFFSET := 2048
-  IMAGES := factory.bin
-  IMAGE/factory.bin = append-kernel
+  KERNEL_SIZE := 4096k
+  BLOCKSIZE := 64k
+  FILESYSTEMS := jffs2-64k
+  IMAGES := sysupgrade.bin
+  IMAGE/sysupgrade.bin = append-kernel | pad-to $$$$(KERNEL_SIZE) | append-rootfs | pad-to $$$$(BLOCKSIZE)
 endef
 TARGET_DEVICES += nuc980-chili
 
