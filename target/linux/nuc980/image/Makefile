@@ -25,7 +25,11 @@ define Image/Build
 endef
 
 define Image/Build/ubifs
-	echo "Building ubifs..."
+	echo "Building ubifs...@@"
+	#echo $(PWD)
+	mv $(KDIR)/root.ubifs .
+	ubinize -o rootfs.ubi $(UBI_OPTS) ubinize.cfg
+	$(CP) rootfs.ubi $(KDIR)/
 endef
 
 define Image/Build/jffs2-64k
