@@ -17,19 +17,21 @@ UBI_OPTS = -m 2048 -p 128KiB -s 2048 -O 2048
 DEVICE_VARS += MKUBIFS_OPTS UBOOT BOOT_SCRIPT
 
 define Image/BuildKernel
-	$(CP) $(KDIR)/uImage $(BIN_DIR)/$(IMG_PREFIX)-uImage
+	$(CP) $(KDIR)/uImage $(BIN_DIR)/$(SUBTARGET)-uImage
 endef
 
 define Image/Build
 	$(call Image/Build/$(1),$(1))
+	$(CP) $(KDIR)/root.$(1) $(BIN_DIR)/$(SUBTARGET)-root.$(1)
 endef
 
 define Image/Build/ubifs
 	echo "Building ubifs...@@"
 	#echo $(PWD)
-	mv $(KDIR)/root.ubifs .
-	ubinize -o rootfs.ubi $(UBI_OPTS) ubinize.cfg
-	$(CP) rootfs.ubi $(KDIR)/
+	mv $(KDIR)/root.ubifs root.ubifs_raw
+	ubinize -o root.ubifs $(UBI_OPTS) ubinize.cfg
+	rm -f root.ubifs_raw
+	mv root.ubifs $(KDIR)/
 endef
 
 define Image/Build/jffs2-64k

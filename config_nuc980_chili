@@ -1370,6 +1370,9 @@ CONFIG_PACKAGE_usign=y
 #
 # Boot Loaders
 #
+CONFIG_PACKAGE_uboot-nuc980-chili=y
+# CONFIG_PACKAGE_uboot-nuc980-evb is not set
+# CONFIG_PACKAGE_uboot-nuc980-iot is not set
 
 #
 # Development
