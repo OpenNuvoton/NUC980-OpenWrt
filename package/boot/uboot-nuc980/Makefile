@@ -91,7 +91,8 @@ define Package/uboot/install/default
 		$(PKG_BUILD_DIR)/u-boot.bin \
 		$(BIN_DIR)/$(BOARD)-$(1)-u-boot.bin
 	
-ifneq (,$(wildcard $(PKG_BUILD_DIR)/spl/u-boot-spl.bin))
+#ifneq (,$(wildcard $(PKG_BUILD_DIR)/spl/u-boot-spl.bin))
+ifneq ($(1), chili)
 	$(CP) \
 		$(PKG_BUILD_DIR)/spl/u-boot-spl.bin \
 		$(BIN_DIR)/$(BOARD)-$(1)-u-boot-spl.bin
