@@ -1,22 +1,9 @@
 config interface loopback
 	option ifname	lo
 	option proto	static
-	option ipaddr	127.0.0.1
 	option netmask	255.0.0.0
 
 config interface lan
 	option ifname	eth0
-	option type 	none
-	option proto	static
-	option ipaddr	192.168.10.11
+	option proto	dhcp
 	option netmask	255.255.255.0
-	option gateway	192.168.10.10
-	option dns	192.168.10.10
-
-config route
-	option target	192.168.10.10
-	option netmask	24
-	option gateway	192.168.10.20
-	option interface lan
-	option metric '2'
-	option mtu '1500'

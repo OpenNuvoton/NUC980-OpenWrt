@@ -76,6 +76,11 @@ else
 uboot_defconfig:=nuc980_$(UBOOT_CONFIG)_defconfig
 endif
 
+define Build/Prepare
+	$(call Build/Prepare/Default)
+	$(CP) ./files/* $(PKG_BUILD_DIR)
+endef
+
 define Build/Configure
 	+$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
 		$(uboot_defconfig)

@@ -59,6 +59,8 @@ ifeq ($(strip $(CONFIG_EXTERNAL_KERNEL_TREE)),"")
   else
     define Kernel/Prepare/Default
 	xzcat $(DL_DIR)/$(LINUX_SOURCE) | $(TAR) -C $(KERNEL_BUILD_DIR) $(TAR_OPTIONS)
+	$(Kernel/Patch)
+	$(if $(QUILT),touch $(LINUX_DIR)/.quilt_used)
     endef
   endif
 else

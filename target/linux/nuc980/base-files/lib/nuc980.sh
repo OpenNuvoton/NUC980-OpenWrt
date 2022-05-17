@@ -13,16 +13,20 @@ nuc980_board_detect() {
 	machine=$(cat /proc/device-tree/model)
 
 	case "$machine" in
-	*"Nuvoton NUC980 DEV V1.0")
-		name="nuc980-dev"
-		;;	
-	*)
+	"Nuvoton NUC980 DEV V1.0")
 		name="nuc980-evb"
+		;;
+	"Nuvoton NUC980 IOT V1.0")
+		name="nuc980-iot"
+		;;
+	"Nuvoton NUC980 CHILI V1.0")
+		name="nuc980-chili"
+		;;
+	*)
+		name="generic"
 		;;
 	esac
 
-##	[ -z "$name" ] && name="unknown"
-##	[ -z "$machine" ] && name="NUC980"
 	[ -z "$NUC980_BOARD_NAME" ] && NUC980_BOARD_NAME="$name"
 	[ -z "$NUC980_MODEL" ] && NUC980_MODEL="$machine"
 
@@ -40,3 +44,4 @@ nuc980_board_name() {
 
 	echo "$name"
 }
+

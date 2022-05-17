@@ -10,6 +10,7 @@ include $(INCLUDE_DIR)/image.mk
 UBIFS_OPTS = -F -m 2048 -e 124KiB -c 4096 -U
 UBI_OPTS = -m 2048 -p 128KiB -s 2048 -O 2048
 
+
 #################################################
 # Images
 #################################################
@@ -17,30 +18,16 @@ UBI_OPTS = -m 2048 -p 128KiB -s 2048 -O 2048
 DEVICE_VARS += MKUBIFS_OPTS UBOOT BOOT_SCRIPT
 
 define Image/BuildKernel
-	$(CP) $(KDIR)/uImage $(BIN_DIR)/$(SUBTARGET)-uImage
+	$(CP) $(KDIR)/linux-4.4.182/arch/arm/boot/dts/nuc980-dev-v1.0.dtb $(KDIR)/linux-4.4.182/arch/arm/boot/dts/nuc980-evb-v1.0.dtb
+	$(CP) $(KDIR)/linux-4.4.182/arch/arm/boot/dts/$(SUBTARGET)-v1.0.dtb $(BIN_DIR)/
+	$(CP) $(KDIR)/../../../Nuvoton/uboot_env/$(SUBTARGET)-u-boot-env.txt $(BIN_DIR)/
 endef
 
 define Image/Build
+	echo "Image/Build" $(1)
 	$(call Image/Build/$(1),$(1))
-	$(CP) $(KDIR)/root.$(1) $(BIN_DIR)/$(SUBTARGET)-root.$(1)
 endef
 
-define Image/Build/ubifs
-	echo "Building ubifs...@@"
-	#echo $(PWD)
-	mv $(KDIR)/root.ubifs root.ubifs_raw
-	ubinize -o root.ubifs $(UBI_OPTS) ubinize.cfg
-	rm -f root.ubifs_raw
-	mv root.ubifs $(KDIR)/
-endef
-
-define Image/Build/jffs2-64k
-	echo "Building jffs2-64k..."
-endef
-
-define Image/Build/jffs2-128k
-	echo "Building jffs2-128k..."
-endef
 
 #################################################
 # Devices
@@ -50,55 +37,61 @@ KERNEL_LOADADDR=0x00008000
 
 define Device/Default
   PROFILES := Generic
-  FILESYSTEMS := squashfs
   KERNEL_INSTALL := 1
   KERNEL_SUFFIX := -uImage
   KERNEL_NAME := uImage
   KERNEL_PREFIX := $$(IMAGE_PREFIX)
   KERNEL := kernel-bin | uImage none
-  IMAGES := sysupgrade.bin
 endef
 
+ifeq ($(SUBTARGET),nuc980-evb)
 define Device/nuc980-evb
   BOARDNAME := nuc980-evb
   DEVICE_PROFILE = $$(BOARDNAME)
   PROFILES = Default Minimal $$(DEVICE_PROFILE)
-  KERNEL := kernel-bin | uImage none
-  KERNEL_SIZE := 4096k
-  BLOCKSIZE := 64k
-  FILESYSTEMS := jffs2-64k
-  IMAGES := sysupgrade.bin
-  IMAGE/sysupgrade.bin = append-kernel | pad-to $$$$(KERNEL_SIZE) | append-rootfs | pad-to $$$$(BLOCKSIZE)
+  IMAGE_SIZE := 14336k
+  PAGESIZE := 2048
+  BLOCKSIZE := 128k
+  FILESYSTEMS := squashfs ubifs
+  SUPPORTED_DEVICES += nuc980-evb
+  IMAGES := firmware.bin sysupgrade.bin
+  IMAGE/firmware.bin := append-kernel | pad-to $$$$(BLOCKSIZE) | append-ubi | check-size $$$$(IMAGE_SIZE)
+  IMAGE/sysupgrade.bin := append-kernel | pad-to $$$$(BLOCKSIZE) | append-ubi | append-metadata | check-size $$$$(IMAGE_SIZE)
 endef
 TARGET_DEVICES += nuc980-evb
+endif
 
+ifeq ($(SUBTARGET),nuc980-iot)
 define Device/nuc980-iot
   BOARDNAME := nuc980-iot
   DEVICE_PROFILE = $$(BOARDNAME)
   PROFILES = Default Minimal $$(DEVICE_PROFILE)
-  KERNEL := kernel-bin | uImage none
-  KERNEL_SIZE := 10240k
-  FILESYSTEMS := ubifs
+  IMAGE_SIZE := 14336k
   PAGESIZE := 2048
   BLOCKSIZE := 128k
-  SUBPAGESIZE := 2048
-  VID_HDR_OFFSET := 2048
-  IMAGES := factory.bin
-  IMAGE/factory.bin = append-kernel
+  FILESYSTEMS := squashfs ubifs
+  SUPPORTED_DEVICES += nuc980-iot
+  IMAGES := firmware.bin sysupgrade.bin
+  IMAGE/firmware.bin := append-kernel | pad-to $$$$(BLOCKSIZE) | append-ubi | check-size $$$$(IMAGE_SIZE)
+  IMAGE/sysupgrade.bin := append-kernel | pad-to $$$$(BLOCKSIZE) | append-ubi | append-metadata | check-size $$$$(IMAGE_SIZE)
 endef
 TARGET_DEVICES += nuc980-iot
+endif
 
+ifeq ($(SUBTARGET),nuc980-chili)
 define Device/nuc980-chili
   BOARDNAME := nuc980-chili
   DEVICE_PROFILE = $$(BOARDNAME)
   PROFILES = Default Minimal $$(DEVICE_PROFILE)
-  KERNEL := kernel-bin | uImage none
-  KERNEL_SIZE := 4096k
+  IMAGE_SIZE := 15360k
   BLOCKSIZE := 64k
-  FILESYSTEMS := jffs2-64k
-  IMAGES := sysupgrade.bin
-  IMAGE/sysupgrade.bin = append-kernel | pad-to $$$$(KERNEL_SIZE) | append-rootfs | pad-to $$$$(BLOCKSIZE)
+  FILESYSTEMS := squashfs jffs2-64k
+  SUPPORTED_DEVICES += nuc980-chili
+  IMAGES := firmware.bin sysupgrade.bin
+  IMAGE/firmware.bin := append-kernel | pad-to $$$$(BLOCKSIZE) | append-rootfs | check-size $$$$(IMAGE_SIZE)
+  IMAGE/sysupgrade.bin := append-kernel | pad-to $$$$(BLOCKSIZE) | append-rootfs | check-size $$$$(IMAGE_SIZE)
 endef
 TARGET_DEVICES += nuc980-chili
+endif
 
 $(eval $(call BuildImage))
