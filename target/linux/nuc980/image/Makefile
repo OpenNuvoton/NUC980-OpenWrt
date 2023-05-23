@@ -18,8 +18,8 @@ UBI_OPTS = -m 2048 -p 128KiB -s 2048 -O 2048
 DEVICE_VARS += MKUBIFS_OPTS UBOOT BOOT_SCRIPT
 
 define Image/BuildKernel
-	$(CP) $(KDIR)/linux-4.4.289/arch/arm/boot/dts/nuc980-dev-v1.0.dtb $(KDIR)/linux-4.4.289/arch/arm/boot/dts/nuc980-evb-v1.0.dtb
-	$(CP) $(KDIR)/linux-4.4.289/arch/arm/boot/dts/$(SUBTARGET)-v1.0.dtb $(BIN_DIR)/
+	$(CP) $(KDIR)/linux-4.4.182/arch/arm/boot/dts/nuc980-dev-v1.0.dtb $(KDIR)/linux-4.4.182/arch/arm/boot/dts/nuc980-evb-v1.0.dtb
+	$(CP) $(KDIR)/linux-4.4.182/arch/arm/boot/dts/$(SUBTARGET)-v1.0.dtb $(BIN_DIR)/
 	$(CP) $(KDIR)/../../../Nuvoton/uboot_env/$(SUBTARGET)-u-boot-env.txt $(BIN_DIR)/
 endef
 
