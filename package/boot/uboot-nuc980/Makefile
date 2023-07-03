@@ -15,9 +15,9 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSI
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/OpenNuvoton/NUC970_U-Boot_v2016.11.git
-PKG_SOURCE_DATE:=2022-01-17
-PKG_SOURCE_VERSION:=ca47203cd21107174ee2d16a68b394e0f99516bd
-PKG_MIRROR_HASH:=
+PKG_SOURCE_DATE:=2022-08-26
+PKG_SOURCE_VERSION:=2f0c3aaff9b7b0279420736b93990211f4504e44
+PKG_MIRROR_HASH:=f3f5fe7772ed4c79253bf385df3aeb7d61605ec54b632031417a8a23cab95d32
 
 PKG_BUILD_PARALLEL:=1
 
@@ -29,22 +29,27 @@ define uboot/Default
   IMAGE:=
 endef
 
-define uboot/iot
-  TITLE:=U-Boot for IoT board
-endef
-
 define uboot/evb
   TITLE:=U-Boot for EVB board
 endef
 
 define uboot/chili
-  TITLE:=U-Boot for chili board
+  TITLE:=U-Boot for Chili board
+endef
+
+define uboot/iot
+  TITLE:=U-Boot for IoT board
+endef
+
+define uboot/iotg2
+  TITLE:=U-Boot for IoT-G2 board
 endef
 
 UBOOTS := \
-	iot \
 	evb \
-	chili
+	chili \
+	iot \
+	iotg2
 
 define Package/uboot/template
 define Package/uboot-nuc980-$(1)
@@ -72,6 +77,8 @@ endif
 
 ifeq ($(subst evb,,$(UBOOT_CONFIG)),)
 uboot_defconfig:=nuc980_defconfig
+else ifeq ($(subst iotg2,,$(UBOOT_CONFIG)),)
+uboot_defconfig:=nuc980_iot_defconfig
 else
 uboot_defconfig:=nuc980_$(UBOOT_CONFIG)_defconfig
 endif

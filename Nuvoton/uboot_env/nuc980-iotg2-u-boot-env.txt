@@ -1,0 +1,11 @@
+baudrate=115200
+bootdelay=1
+stderr=serial
+stdin=serial
+stdout=serial
+setspi=sf probe 0 30000000
+loaddtb=sf read 0x1400000 0x180000 0x20000
+loadkernel=sf read 0x7fc0 0x200000 0xE00000
+bootcmd=run setspi;run loaddtb;run loadkernel;bootm 0x7fc0 - 0x1400000
+mtdparts=mtdparts=nand0:0x180000@0x0(u-boot),0x20000@0x180000(dtb),-@0x200000(firmware)
+bootargs=noinitrd rootfstype=squashfs,ubifs console=ttyS0,115200n8 rdinit=/sbin/init mem=128M mtdparts=nand0:0x180000@0x0(u-boot),0x20000@0x180000(dtb),-@0x200000(firmware)

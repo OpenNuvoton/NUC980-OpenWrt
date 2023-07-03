@@ -779,9 +779,10 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += \
 	mt8135-evbp1.dtb
 dtb-$(CONFIG_ARCH_ZX) += zx296702-ad1.dtb
 dtb-$(CONFIG_ARCH_NUC980) += \
-	nuc980-dev-v1.0.dtb \
+	nuc980-evb-v1.0.dtb \
+	nuc980-chili-v1.0.dtb \
 	nuc980-iot-v1.0.dtb \
-	nuc980-chili-v1.0.dtb
+	nuc980-iotg2-v1.0.dtb
 endif
 
 dtstree		:= $(srctree)/$(src)

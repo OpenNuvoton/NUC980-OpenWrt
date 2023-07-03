@@ -11,7 +11,7 @@ BOARD:=nuc980
 BOARDNAME:=Nuvoton NUC980
 FEATURES:=gpio usb targz nand ubifs boot-part rootfs-part jffs2
 CPU_TYPE:=arm926ej-s
-SUBTARGETS:=nuc980-evb nuc980-iot nuc980-chili
+SUBTARGETS:=nuc980-evb nuc980-chili nuc980-iot nuc980-iotg2
 
 KERNEL_PATCHVER:=4.4
 
