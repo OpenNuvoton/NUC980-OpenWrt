@@ -18,7 +18,7 @@ UBI_OPTS = -m 2048 -p 128KiB -s 2048 -O 2048
 DEVICE_VARS += MKUBIFS_OPTS UBOOT BOOT_SCRIPT
 
 define Image/BuildKernel
-	$(CP) $(KDIR)/linux-4.4.182/arch/arm/boot/dts/$(SUBTARGET)-v1.0.dtb $(BIN_DIR)/
+	$(CP) $(KDIR)/linux-4.4.182/arch/arm/boot/dts/$(SUBTARGET).dtb $(BIN_DIR)/
 	$(CP) $(KDIR)/../../../Nuvoton/uboot_env/$(SUBTARGET)-u-boot-env.txt $(BIN_DIR)/
 endef
 
@@ -41,6 +41,7 @@ define Device/Default
   KERNEL_NAME := uImage
   KERNEL_PREFIX := $$(IMAGE_PREFIX)
   KERNEL := kernel-bin | uImage none
+  IMAGES := firmware.bin sysupgrade.bin
 endef
 
 ifeq ($(SUBTARGET),nuc980-evb)
@@ -53,7 +54,6 @@ define Device/nuc980-evb
   BLOCKSIZE := 128k
   FILESYSTEMS := squashfs ubifs
   SUPPORTED_DEVICES += nuc980-evb
-  IMAGES := firmware.bin sysupgrade.bin
   IMAGE/firmware.bin := append-kernel | pad-to $$$$(BLOCKSIZE) | append-ubi | check-size $$$$(IMAGE_SIZE)
   IMAGE/sysupgrade.bin := append-kernel | pad-to $$$$(BLOCKSIZE) | append-ubi | append-metadata | check-size $$$$(IMAGE_SIZE)
 endef
@@ -69,7 +69,6 @@ define Device/nuc980-chili
   BLOCKSIZE := 64k
   FILESYSTEMS := squashfs jffs2-64k
   SUPPORTED_DEVICES += nuc980-chili
-  IMAGES := firmware.bin sysupgrade.bin
   IMAGE/firmware.bin := append-kernel | pad-to $$$$(BLOCKSIZE) | append-rootfs | check-size $$$$(IMAGE_SIZE)
   IMAGE/sysupgrade.bin := append-kernel | pad-to $$$$(BLOCKSIZE) | append-rootfs | check-size $$$$(IMAGE_SIZE)
 endef
@@ -86,7 +85,6 @@ define Device/nuc980-iot
   BLOCKSIZE := 128k
   FILESYSTEMS := squashfs ubifs
   SUPPORTED_DEVICES += nuc980-iot
-  IMAGES := firmware.bin sysupgrade.bin
   IMAGE/firmware.bin := append-kernel | pad-to $$$$(BLOCKSIZE) | append-ubi | check-size $$$$(IMAGE_SIZE)
   IMAGE/sysupgrade.bin := append-kernel | pad-to $$$$(BLOCKSIZE) | append-ubi | append-metadata | check-size $$$$(IMAGE_SIZE)
 endef
@@ -103,7 +101,6 @@ define Device/nuc980-iotg2
   BLOCKSIZE := 128k
   FILESYSTEMS := squashfs ubifs
   SUPPORTED_DEVICES += nuc980-iotg2
-  IMAGES := firmware.bin sysupgrade.bin
   IMAGE/firmware.bin := append-kernel | pad-to $$$$(BLOCKSIZE) | append-ubi | check-size $$$$(IMAGE_SIZE)
   IMAGE/sysupgrade.bin := append-kernel | pad-to $$$$(BLOCKSIZE) | append-ubi | append-metadata | check-size $$$$(IMAGE_SIZE)
 endef
