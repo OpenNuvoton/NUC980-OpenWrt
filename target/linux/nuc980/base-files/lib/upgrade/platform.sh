@@ -14,7 +14,7 @@ platform_pre_upgrade() {
         local board=$(nuc980_board_name)
 
         case "$board" in
-        *iot* | *evb*)
+        *iot* | *evb* | *server*)
                 mtd erase firmware
                 ;;
         esac

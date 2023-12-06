@@ -45,11 +45,16 @@ define uboot/iotg2
   TITLE:=U-Boot for IoT-G2 board
 endef
 
+define uboot/server
+  TITLE:=U-Boot for Server board
+endef
+
 UBOOTS := \
 	evb \
 	chili \
 	iot \
-	iotg2
+	iotg2 \
+	server
 
 define Package/uboot/template
 define Package/uboot-nuc980-$(1)
@@ -79,13 +84,15 @@ ifeq ($(subst evb,,$(UBOOT_CONFIG)),)
 uboot_defconfig:=nuc980_defconfig
 else ifeq ($(subst iotg2,,$(UBOOT_CONFIG)),)
 uboot_defconfig:=nuc980_iot_defconfig
+else ifeq ($(subst server,,$(UBOOT_CONFIG)),)
+uboot_defconfig:=nuc980_eth2uart_defconfig
 else
 uboot_defconfig:=nuc980_$(UBOOT_CONFIG)_defconfig
 endif
 
 define Build/Prepare
 	$(call Build/Prepare/Default)
-	$(CP) ./files/* $(PKG_BUILD_DIR)
+#	$(CP) ./files/* $(PKG_BUILD_DIR)
 endef
 
 define Build/Configure

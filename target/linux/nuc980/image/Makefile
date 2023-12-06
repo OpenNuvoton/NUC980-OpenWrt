@@ -107,4 +107,20 @@ endef
 TARGET_DEVICES += nuc980-iotg2
 endif
 
+ifeq ($(SUBTARGET),nuc980-server)
+define Device/nuc980-server
+  BOARDNAME := nuc980-server
+  DEVICE_PROFILE = $$(BOARDNAME)
+  PROFILES = Default Minimal $$(DEVICE_PROFILE)
+  IMAGE_SIZE := 14336k
+  PAGESIZE := 2048
+  BLOCKSIZE := 128k
+  FILESYSTEMS := squashfs ubifs
+  SUPPORTED_DEVICES += nuc980-server
+  IMAGE/firmware.bin := append-kernel | pad-to $$$$(BLOCKSIZE) | append-ubi | check-size $$$$(IMAGE_SIZE)
+  IMAGE/sysupgrade.bin := append-kernel | pad-to $$$$(BLOCKSIZE) | append-ubi | append-metadata | check-size $$$$(IMAGE_SIZE)
+endef
+TARGET_DEVICES += nuc980-server
+endif
+
 $(eval $(call BuildImage))

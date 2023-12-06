@@ -22,6 +22,9 @@ nuc980_board_detect() {
 	"Nuvoton NUC980 CHILI V1.0")
 		name="nuc980-chili"
 		;;
+	"Nuvoton NUC980 Server V1.0")
+		name="nuc980-server"
+		;;
 	*)
 		name="generic"
 		;;
