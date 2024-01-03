@@ -19,6 +19,9 @@ nuc980_board_detect() {
 	"Nuvoton NUC980 IOT V1.0")
 		name="nuc980-iot"
 		;;
+	"Nuvoton NUC980 IOT-G2 V1.0")
+		name="nuc980-iotg2"
+		;;
 	"Nuvoton NUC980 CHILI V1.0")
 		name="nuc980-chili"
 		;;
